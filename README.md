@@ -19,6 +19,8 @@
 4. Enable plugin in Obsidian
 5. Start chatting!
 
+![Screenshot](tutorials/example.png)
+
 ## Tech Stack
 
 **Backend**: PyTorch Geometric, Sentence Transformers, NetworkX, Flask  
