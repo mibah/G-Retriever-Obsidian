@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Retriever Obsidian Plugin - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .hero-banner {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .hero-banner img {
+            max-width: 800px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        section {
+            margin-bottom: 60px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.6em;
+            margin: 30px 0 15px 0;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        .step-container {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 20px;
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .step-content h4 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .file-structure {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+        }
+        
+        .file-structure .folder {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .file-structure .file {
+            color: #555;
+            margin-left: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .screenshot {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            display: block;
+            border: 3px solid #667eea;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .comparison-card {
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            background: white;
+        }
+        
+        .comparison-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .comparison-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .comparison-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .comparison-card.cons li:before {
+            content: "✗";
+            color: #dc3545;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .architecture-flow {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .flow-item {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+        
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .step-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .plugin-preview {
+            background: #f8f9fa;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .chat-mockup {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        
+        .chat-message.user {
+            background: #667eea;
+            color: white;
+            text-align: right;
+            margin-left: 60px;
+        }
+        
+        .chat-message.assistant {
+            background: #e8f4f8;
+            margin-right: 60px;
+        }
+        
+        .chat-message.system {
+            background: #f8f9fa;
+            font-size: 0.9em;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💬 G-Retriever Obsidian Plugin</h1>
+            <p>Chat with Your Vault - Part 2: Building the Plugin</p>
+        </header>
+        
+        <div class="hero-banner">
+            <div class="chat-mockup">
+                <div class="chat-message system">G-Retriever ready! Ask me anything about your notes.</div>
+                <div class="chat-message user">What are the main concepts in my machine learning notes?</div>
+                <div class="chat-message assistant">Based on your notes, the key concepts are: Neural Networks with Backpropagation, Gradient Descent optimization, Loss Functions (MSE, Cross-Entropy)...</div>
+                <div class="chat-message system">📚 Sources: Neural Networks, Backpropagation, Gradient Descent</div>
+            </div>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#development">Development</a></li>
+                <li><a href="#usage">Usage</a></li>
+                <li><a href="#distribution">Distribution</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <section id="overview">
+                <h2>📖 Overview</h2>
+                
+                <p>This guide shows you how to transform your G-Retriever system into a fully functional Obsidian plugin. Instead of running queries from the command line, users can now chat directly within Obsidian!</p>
+                
+                <div class="info-box">
+                    <h4>🎯 What you'll build:</h4>
+                    <ul>
+                        <li>A chat interface embedded in Obsidian's sidebar</li>
+                        <li>Auto-connecting backend with smart port detection</li>
+                        <li>Real-time status indicators</li>
+                        <li>Beautiful UI that matches Obsidian's theme</li>
+                        <li>Easy distribution for end users</li>
+                    </ul>
+                </div>
+                
+                <div class="success-box">
+                    <h4>✅ Prerequisites:</h4>
+                    <p>You should have completed Part 1 and have:</p>
+                    <ul>
+                        <li>Working G-Retriever system with trained/untrained models</li>
+                        <li>Generated graph from your Obsidian vault</li>
+                        <li>Ollama running with llama3:8b</li>
+                        <li>All Python modules from Part 1</li>
+                    </ul>
+                </div>
+                
+                <h3>Why Build an Obsidian Plugin?</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h4>Native Integration</h4>
+                        <p>Chat interface lives directly in Obsidian, matching its look and feel perfectly.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Instant Access</h4>
+                        <p>No switching between terminal and editor. Ask questions while writing.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h4>Context Aware</h4>
+                        <p>Plugin knows which vault you're in, automatically using the right graph.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h4>Easy Distribution</h4>
+                        <p>Share with others - they just enable the plugin and start chatting.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="architecture">
+                <h2>🏗️ Plugin Architecture</h2>
+                
+                <h3>How it Works</h3>
+                
+                <div class="architecture-flow">
+                    <div class="flow-item">Obsidian Plugin (JavaScript)</div>
+                    <span class="flow-arrow">↔️</span>
+                    <div class="flow-item">Flask API (Python)</div>
+                    <span class="flow-arrow">↔️</span>
+                    <div class="flow-item">G-Retriever Backend</div>
+                    <span class="flow-arrow">↔️</span>
+                    <div class="flow-item">Ollama LLM</div>
+                </div>
+                
+                <h3>Component Breakdown</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>Frontend (Obsidian Plugin)</h4>
+                        <ul>
+                            <li><strong>Language:</strong> JavaScript</li>
+                            <li><strong>UI:</strong> Custom chat interface</li>
+                            <li><strong>Communication:</strong> REST API calls</li>
+                            <li><strong>Files:</strong> main.js, styles.css, manifest.json</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>Backend (Python API)</h4>
+                        <ul>
+                            <li><strong>Framework:</strong> Flask</li>
+                            <li><strong>Port:</strong> Auto-detected (5000+)</li>
+                            <li><strong>Endpoints:</strong> /query, /health</li>
+                            <li><strong>File:</strong> api_server.py</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Why This Approach?</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>✅ Pros of Hybrid Architecture</h4>
+                        <ul>
+                            <li>Keep full Python/PyTorch power</li>
+                            <li>Native Obsidian integration</li>
+                            <li>Easy to develop and debug</li>
+                            <li>Can use any Python library</li>
+                            <li>Ollama stays external (good!)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-card cons">
+                        <h4>⚠️ Trade-offs</h4>
+                        <ul>
+                            <li>Users must start Python server</li>
+                            <li>Not a "pure" Obsidian plugin</li>
+                            <li>Requires Python installation</li>
+                            <li>Two-component setup</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>💡 Alternative Approaches Considered:</h4>
+                    <ul>
+                        <li><strong>Pure JavaScript:</strong> Would require rewriting everything in TensorFlow.js - massive effort, worse performance</li>
+                        <li><strong>Python Binary:</strong> Package Python as executable - works but creates 500MB+ downloads</li>
+                        <li><strong>Hybrid (Current):</strong> Best balance of power and usability</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="installation">
+                <h2>⚙️ Installation Guide</h2>
+                
+                <h3>Project Structure</h3>
+                
+                <div class="warning-box">
+                    <h4>📁 Important: Files go in TWO different places!</h4>
+                </div>
+                
+                <div class="file-structure">
+                    <div class="folder">📂 Your Python Project (G_Obsidian/)</div>
+                    <div class="file">├── api_server.py ← NEW</div>
+                    <div class="file">├── gretriever_inference.py</div>
+                    <div class="file">├── train_gretriever.py</div>
+                    <div class="file">├── graph_output/</div>
+                    <div class="file">├── training_data/</div>
+                    <div class="file">├── START_SERVER.command ← NEW</div>
+                    <div class="file">└── requirements.txt</div>
+                    <br>
+                    <div class="folder">📂 Your Obsidian Vault</div>
+                    <div class="folder">└── .obsidian/</div>
+                    <div class="folder">&nbsp;&nbsp;&nbsp;&nbsp;└── plugins/</div>
+                    <div class="folder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── g-retriever-chat/</div>
+                    <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── manifest.json ← NEW</div>
+                    <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── main.js ← NEW</div>
+                    <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── styles.css ← NEW</div>
+                </div>
+                
+                <h3>Step-by-Step Setup</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Install Flask Dependencies</h4>
+                        <p>Add API server capabilities to your Python project:</p>
+                        <pre><code>cd /path/to/G_Obsidian
+pip install flask flask-cors</code></pre>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Create API Server</h4>
+                        <p>Create <code>api_server.py</code> in your Python project. This bridges Obsidian and G-Retriever.</p>
+                        <div class="info-box">
+                            <strong>Key Features:</strong>
+                            <ul>
+                                <li>Auto-detects free port (no conflicts!)</li>
+                                <li>Saves config for plugin to read</li>
+                                <li>CORS enabled for Obsidian</li>
+                                <li>Simple REST endpoints</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Create Plugin Folder</h4>
+                        <p>In your Obsidian vault, create the plugin directory:</p>
+                        <pre><code>mkdir -p /path/to/vault/.obsidian/plugins/g-retriever-chat</code></pre>
+                        <div class="warning-box">
+                            <strong>Note:</strong> The <code>.obsidian</code> folder is hidden! On Mac, press <code>Cmd+Shift+.</code> to show hidden files.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Add Plugin Files</h4>
+                        <p>Create three files in the plugin folder:</p>
+                        <ul>
+                            <li><code>manifest.json</code> - Plugin metadata</li>
+                            <li><code>main.js</code> - Plugin logic and UI</li>
+                            <li><code>styles.css</code> - Beautiful styling</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Create Start Script</h4>
+                        <p>Make it easy for users to start the backend:</p>
+                        <p><strong>Mac/Linux:</strong> <code>START_SERVER.command</code></p>
+                        <pre><code>#!/bin/bash
+cd "$(dirname "$0")"
+source venv/bin/activate
+python api_server.py</code></pre>
+                        <p><strong>Windows:</strong> <code>START_SERVER.bat</code></p>
+                        <pre><code>@echo off
+cd /d %~dp0
+call venv\Scripts\activate
+python api_server.py
+pause</code></pre>
+                        <p>Make executable on Mac/Linux:</p>
+                        <pre><code>chmod +x START_SERVER.command</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="development">
+                <h2>💻 Development Details</h2>
+                
+                <h3>API Server (api_server.py)</h3>
+                
+                <p>The Flask server is the bridge between your plugin and G-Retriever. Key features:</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔍 Auto Port Detection</h4>
+                        <pre><code>def find_free_port(start_port=5000):
+    for port in range(start_port, start_port + 10):
+        try:
+            sock = socket.socket()
+            sock.bind(('', port))
+            sock.close()
+            return port
+        except OSError:
+            continue</code></pre>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>💾 Config Persistence</h4>
+                        <pre><code>def save_port_config(port):
+    config = {
+        "port": port,
+        "url": f"http://localhost:{port}"
+    }
+    with open(Path.home() / ".g-retriever-config.json", 'w') as f:
+        json.dump(config, f)</code></pre>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>🔌 Query Endpoint</h4>
+                        <pre><code>@app.route('/query', methods=['POST'])
+def query():
+    data = request.get_json()
+    question = data.get('question', '')
+    result = retriever.query(question)
+    return jsonify(result)</code></pre>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>💚 Health Check</h4>
+                        <pre><code>@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({
+        'status': 'ok',
+        'message': 'G-Retriever running'
+    })</code></pre>
+                    </div>
+                </div>
+                
+                <h3>Plugin Architecture (main.js)</h3>
+                
+                <h4>Core Classes</h4>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Purpose</th>
+                            <th>Key Methods</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GRetrieverPlugin</code></td>
+                            <td>Main plugin controller</td>
+                            <td><code>onload()</code>, <code>activateView()</code>, <code>getApiUrl()</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>GRetrieverChatView</code></td>
+                            <td>Chat UI and logic</td>
+                            <td><code>sendMessage()</code>, <code>checkBackendStatus()</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>Smart Backend Connection</h4>
+                
+                <div class="info-box">
+                    <p>The plugin automatically finds the backend by:</p>
+                    <ol>
+                        <li>Reading <code>~/.g-retriever-config.json</code> (auto-generated by server)</li>
+                        <li>Falling back to <code>http://localhost:5000</code></li>
+                        <li>Testing connection with <code>/health</code> endpoint</li>
+                        <li>Showing clear status indicator to user</li>
+                    </ol>
+                </div>
+                
+                <pre><code>async getApiUrl() {
+    const configPath = path.join(os.homedir(), '.g-retriever-config.json');
+    
+    try {
+        if (fs.existsSync(configPath)) {
+            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            return config.url;
+        }
+    } catch (error) {
+        console.error('Error reading config:', error);
+    }
+    
+    // Fallback
+    return 'http://localhost:5000';
+}</code></pre>
+                
+                <h3>UI Components</h3>
+                
+                <div class="plugin-preview">
+                    <h4>Status Bar</h4>
+                    <p>Shows connection status with color indicators:</p>
+                    <ul>
+                        <li>🟢 <strong>Connected</strong> - Backend is running and responsive</li>
+                        <li>🔴 <strong>Not Connected</strong> - Backend not found or not responding</li>
+                        <li>🟡 <strong>Checking...</strong> - Testing connection</li>
+                    </ul>
+                    
+                    <h4>Chat Interface</h4>
+                    <ul>
+                        <li><strong>User messages:</strong> Right-aligned, accent color</li>
+                        <li><strong>Assistant messages:</strong> Left-aligned, secondary background </li>
+                        <li><strong>System messages:</strong> Centered, muted style</li>
+                        <li><strong>Sources:</strong> Small italic text showing which notes were used</li>
+                    </ul>
+                <h4>Input Area</h4>
+                <ul>
+                    <li>Resizable textarea for questions</li>
+                    <li>Send button</li>
+                    <li>Keyboard shortcut: <code>Ctrl/Cmd + Enter</code></li>
+                </ul>
+            </div>
+
+            <h3>Styling Philosophy</h3>
+
+            <div class="success-box">
+                <h4>Theme Integration</h4>
+                <p>The plugin uses Obsidian's CSS variables to perfectly match any theme:</p>
+                <ul>
+                    <li><code>--background-primary</code> - Main background</li>
+                    <li><code>--background-secondary</code> - Panel background</li>
+                    <li><code>--text-normal</code> - Text color</li>
+                    <li><code>--interactive-accent</code> - Accent color</li>
+                    <li><code>--text-on-accent</code> - Text on accent</li>
+                </ul>
+                <p>This means it works beautifully with <strong>any</strong> Obsidian theme!</p>
+            </div>
+        </section>
+
+        <section id="usage">
+            <h2>🚀 Usage</h2>
+
+            <h3>For Developers (You)</h3>
+
+            <div class="step-container">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Start Backend</h4>
+                    <pre><code>cd /path/to/G_Obsidian
+python api_server.py
+Or double-click START_SERVER.command</code></pre>
+                    <p>You should see:</p>
+                    <pre><code>Initializing G-Retriever...
+GraphRetriever ready!
+============================================================
+G-Retriever API Server
+Running on http://localhost:5000
+============================================================</code></pre>
+</div>
+</div>
+            <div class="step-container">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Enable Plugin in Obsidian</h4>
+                    <ol>
+                        <li>Open Obsidian Settings (⚙️)</li>
+                        <li>Go to <strong>Community plugins</strong></li>
+                        <li>Click the 🔄 <strong>Reload</strong> button</li>
+                        <li>Find "G-Retriever Chat" in the list</li>
+                        <li>Toggle it <strong>ON</strong></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Open Chat Interface</h4>
+                    <p>Three ways to open:</p>
+                    <ul>
+                        <li>Click the 💬 icon in the left ribbon</li>
+                        <li>Press <code>Ctrl/Cmd + P</code> and type "G-Retriever"</li>
+                        <li>Use the command palette</li>
+                    </ul>
+                    <p>The chat panel opens in the right sidebar!</p>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Start Chatting!</h4>
+                    <ul>
+                        <li>Type your question in the input box</li>
+                        <li>Press <code>Ctrl/Cmd + Enter</code> or click "Send"</li>
+                        <li>G-Retriever will search your notes and respond</li>
+                        <li>Sources are shown below each answer</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Example Queries</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔍 Factual Questions</h4>
+                    <ul>
+                        <li>"What is gradient descent?"</li>
+                        <li>"How do I implement backpropagation?"</li>
+                        <li>"What are the main Python libraries I use?"</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🔗 Connection Questions</h4>
+                    <ul>
+                        <li>"How do neural networks relate to deep learning?"</li>
+                        <li>"What projects use React?"</li>
+                        <li>"Show connections between my ML notes"</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📊 Summary Questions</h4>
+                    <ul>
+                        <li>"Summarize my notes on transformers"</li>
+                        <li>"What have I learned about Python?"</li>
+                        <li>"Overview of my project ideas"</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🎯 Specific Lookups</h4>
+                    <ul>
+                        <li>"Find notes mentioning PyTorch"</li>
+                        <li>"What did I write about attention mechanisms?"</li>
+                        <li>"Show me graph-related notes"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="distribution">
+            <h2>📦 Distribution</h2>
+
+            <h3>For End Users</h3>
+
+            <p>When sharing your plugin, users need to:</p>
+
+            <div class="step-container">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Prerequisites</h4>
+                    <ul>
+                        <li>Python 3.9+ installed</li>
+                        <li>Ollama running with llama3:8b</li>
+                        <li>Your G_Obsidian package with their graph</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Install Plugin</h4>
+                    <p>Copy the plugin folder to their vault:</p>
+                    <pre><code>cp -r g-retriever-chat /path/to/their/vault/.obsidian/plugins/</code></pre>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Start Server</h4>
+                    <p>Double-click <code>START_SERVER.command</code> (keep window open)</p>
+                </div>
+            </div>
+
+            <div class="step-container">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Enable in Obsidian</h4>
+                    <p>Settings → Community Plugins → Enable "G-Retriever Chat"</p>
+                </div>
+            </div>
+
+            <h3>Distribution Package</h3>
+
+            <p>Create a simple distribution package with this structure:</p>
+
+            <div class="file-structure">
+                <div class="folder">📦 G-Retriever-Plugin-Package/</div>
+                <div class="file">├── README.md</div>
+                <div class="file">├── requirements.txt</div>
+                <div class="file">├── START_SERVER.command</div>
+                <div class="file">├── START_SERVER.bat</div>
+                <div class="folder">├── plugin/</div>
+                <div class="file">│   ├── manifest.json</div>
+                <div class="file">│   ├── main.js</div>
+                <div class="file">│   └── styles.css</div>
+                <div class="folder">└── python/</div>
+                <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;├── api_server.py</div>
+                <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;├── gretriever_inference.py</div>
+                <div class="file">&nbsp;&nbsp;&nbsp;&nbsp;└── ... (all other Python files)</div>
+            </div>
+
+            <h3>User README Template</h3>
+
+            <div class="info-box">
+                <h4>README.md</h4>
+                <pre><code># G-Retriever Chat for Obsidian
+Quick Start
+1. Install Python Dependencies
+bashcd python/
+pip install -r requirements.txt
+2. Generate Your Graph
+bashpython obsidian_to_graph.py /path/to/your/vault
+python generate_training_data.py
+3. Install Plugin
+Copy the plugin/ folder to:
+
+Mac/Linux: ~/.obsidian/plugins/g-retriever-chat/
+Windows: C:\Users\YourName\.obsidian\plugins\g-retriever-chat\
+
+4. Start Server
+
+Mac/Linux: Double-click START_SERVER.command
+Windows: Double-click START_SERVER.bat
+
+5. Enable Plugin
+Obsidian → Settings → Community Plugins → Enable "G-Retriever Chat"
+6. Chat!
+Click the 💬 icon in the sidebar
+Troubleshooting
+Backend not connecting?
+
+Make sure START_SERVER script is running
+Check that Ollama is running: ollama list
+Try restarting the backend
+
+Plugin not showing up?
+
+Verify files are in .obsidian/plugins/g-retriever-chat/
+Click reload button in Community Plugins
+Check Developer Console (Ctrl+Shift+I) for errors
+
+Port already in use?
+
+The server auto-detects free ports
+Check .g-retriever-config.json in your home directory
+
+Support
+For issues, check the GitHub repository or open an issue.</code></pre>
+</div>
+</section>
+        <section id="advanced">
+            <h2>🎯 Advanced Topics</h2>
+
+            <h3>Customization Options</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🎨 Custom Styling</h4>
+                    <p>Users can customize the chat appearance by editing <code>styles.css</code>:</p>
+                    <pre><code>/* Change chat colors */
+.g-retriever-user {
+background: #your-color;
+}
+/* Adjust sizes */
+.g-retriever-input {
+min-height: 100px;
+}</code></pre>
+</div>
+                <div class="feature-card">
+                    <h4>🔧 Backend Configuration</h4>
+                    <p>Modify <code>api_server.py</code> to:</p>
+                    <ul>
+                        <li>Change default port range</li>
+                        <li>Adjust timeout values</li>
+                        <li>Add custom endpoints</li>
+                        <li>Enable debug logging</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🚀 Performance Tuning</h4>
+                    <ul>
+                        <li>Adjust <code>k_retrieve</code> parameter</li>
+                        <li>Change context length limit</li>
+                        <li>Modify temperature settings</li>
+                        <li>Cache frequently accessed nodes</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🔌 Add Features</h4>
+                    <p>Extend the plugin with:</p>
+                    <ul>
+                        <li>Chat history export</li>
+                        <li>Favorite queries</li>
+                        <li>Multi-vault support</li>
+                        <li>Note insertion from chat</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Troubleshooting Common Issues</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Plugin not appearing</td>
+                        <td>Files in wrong location</td>
+                        <td>Verify path: <code>.obsidian/plugins/g-retriever-chat/</code></td>
+                    </tr>
+                    <tr>
+                        <td>"Backend not responding"</td>
+                        <td>Server not running</td>
+                        <td>Start <code>api_server.py</code></td>
+                    </tr>
+                    <tr>
+                        <td>Port conflict</td>
+                        <td>5000-5010 occupied</td>
+                        <td>Auto-detection handles this - check config file</td>
+                    </tr>
+                    <tr>
+                        <td>Slow responses</td>
+                        <td>Large vault or slow Ollama</td>
+                        <td>Reduce <code>k_retrieve</code>, use faster Ollama model</td>
+                    </tr>
+                    <tr>
+                        <td>Wrong notes retrieved</td>
+                        <td>Graph outdated</td>
+                        <td>Regenerate graph: <code>python obsidian_to_graph.py</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Future Enhancements</h3>
+
+            <div class="info-box">
+                <h4>🚧 Potential Features to Add:</h4>
+                <ul>
+                    <li><strong>Auto-refresh:</strong> Detect vault changes and regenerate graph automatically</li>
+                    <li><strong>Context menu:</strong> Right-click on notes to ask questions about them</li>
+                    <li><strong>Inline questions:</strong> Select text and ask questions via context menu</li>
+                    <li><strong>Export conversations:</strong> Save chat history as markdown notes</li>
+                    <li><strong>Multi-model support:</strong> Switch between different Ollama models</li>
+                    <li><strong>Voice input:</strong> Ask questions via microphone</li>
+                    <li><strong>Graph visualization:</strong> Show which notes are connected to your query</li>
+                    <li><strong>Settings panel:</strong> Configure behavior without editing code</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <h2>🎉 Conclusion</h2>
+
+            <div class="success-box">
+                <h3>You've Built a Full-Featured Plugin!</h3>
+                <p>Congratulations! You now have:</p>
+                <ul>
+                    <li>✅ A beautiful chat interface in Obsidian</li>
+                    <li>✅ Smart backend with auto-detection</li>
+                    <li>✅ Real-time status indicators</li>
+                    <li>✅ Theme-aware styling</li>
+                    <li>✅ Easy distribution for users</li>
+                </ul>
+            </div>
+
+            <h3>Key Takeaways</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔧 Architecture</h4>
+                    <p>Hybrid approach combines JavaScript frontend with Python backend for best of both worlds.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🎨 Integration</h4>
+                    <p>Using Obsidian's CSS variables ensures perfect theme compatibility.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>⚡ User Experience</h4>
+                    <p>Auto-detection and clear status indicators make setup painless.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📦 Distribution</h4>
+                    <p>Simple start scripts and clear README make sharing easy.</p>
+                </div>
+            </div>
+
+            <h3>What's Next?</h3>
+
+            <div class="info-box">
+                <h4>Continue the Journey:</h4>
+                <ul>
+                    <li>Share your plugin with the community</li>
+                    <li>Add custom features based on your needs</li>
+                    <li>Experiment with different models and parameters</li>
+                    <li>Build other Obsidian plugins using this template</li>
+                    <li>Contribute improvements back to the project</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="#overview" class="btn">Back to Top</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>G-Retriever Obsidian Plugin</strong></p>
+        <p>Part 2: Building the Plugin Interface</p>
+        <p style="margin-top: 20px; opacity: 0.8;">Built with ❤️ for the Obsidian community</p>
+        <p style="margin-top: 10px; opacity: 0.6;">Graph Neural Networks + Large Language Models + Beautiful UI</p>
+    </footer>
+</div>
+</body>
+</html>

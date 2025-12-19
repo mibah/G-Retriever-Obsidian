@@ -1,0 +1,18 @@
+# ignore folders but keep their contents
+training_data/
+!training_data/**
+
+processed_data/
+!processed_data/**
+
+graph_output/
+!graph_output/**
+
+models/
+!models/**
+
+# keep folders even if empty
+!training_data/.gitkeep
+!processed_data/.gitkeep
+!graph_output/.gitkeep
+!models/.gitkeep

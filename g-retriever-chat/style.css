@@ -1,0 +1,99 @@
+.g-retriever-chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+}
+
+.g-retriever-chat-box {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: var(--background-secondary);
+    border-radius: 8px;
+}
+
+.g-retriever-message {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.g-retriever-user {
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+    margin-left: auto;
+    text-align: right;
+}
+
+.g-retriever-assistant {
+    background: var(--background-primary-alt);
+    margin-right: auto;
+}
+
+.g-retriever-system {
+    background: var(--background-modifier-border);
+    font-size: 0.9em;
+    opacity: 0.8;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.g-retriever-message.sources {
+    font-size: 0.85em;
+    font-style: italic;
+    max-width: 100%;
+}
+
+.g-retriever-input-container {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.g-retriever-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background: var(--background-primary);
+    color: var(--text-normal);
+    resize: vertical;
+    min-height: 60px;
+    font-family: var(--font-interface);
+}
+
+.g-retriever-send-button {
+    padding: 8px 20px;
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.g-retriever-send-button:hover {
+    background: var(--interactive-accent-hover);
+}
+
+.g-retriever-chat-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.g-retriever-chat-box::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+}
+
+.g-retriever-chat-box::-webkit-scrollbar-thumb {
+    background: var(--background-modifier-border);
+    border-radius: 4px;
+}
+
+.g-retriever-chat-box::-webkit-scrollbar-thumb:hover {
+    background: var(--text-faint);
+}
