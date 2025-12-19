@@ -171,7 +171,7 @@ class ObsidianGraphBuilder:
 def main():
     # todo Nur md files aus dem Vault laden, nicht sub folder, wie z.B. .trash
 
-    vault_path = "/Users/mibahn/Documents/Obsidian_Vault_backup_11_dec_25"
+    vault_path = "/Users/.../Documents/yourvault"
     output_path = "./graph_output"
 
     builder = ObsidianGraphBuilder(vault_path)
