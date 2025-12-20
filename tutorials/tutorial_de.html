@@ -1076,49 +1076,49 @@ batch_size = 10  # Mehrere Prompts parallel</code></pre>
 isolated = list(nx.isolates(self.graph))
 self.graph.remove_nodes_from(isolated)</code></pre>
 </div>
-            <h3>Benchmark (1100 Knoten):</h3>
+                <h3>Benchmark (1100 nodes):</h3>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Operation</th>
-                        <th>CPU (M1)</th>
-                        <th>GPU (RTX 3080)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Graph Building</td>
-                        <td>2 min</td>
-                        <td>2 min</td>
-                    </tr>
-                    <tr>
-                        <td>Node Embeddings</td>
-                        <td>3 min</td>
-                        <td>45 sec</td>
-                    </tr>
-                    <tr>
-                        <td>500 QA-Paare</td>
-                        <td>90 min</td>
-                        <td>90 min</td>
-                    </tr>
-                    <tr>
-                        <td>PyG Dataset</td>
-                        <td>8 min</td>
-                        <td>3 min</td>
-                    </tr>
-                    <tr>
-                        <td>Training (20 epochs)</td>
-                        <td>180 min</td>
-                        <td>45 min</td>
-                    </tr>
-                    <tr>
-                        <td>Query Inference</td>
-                        <td>3 sec</td>
-                        <td>2 sec</td>
-                    </tr>
-                </tbody>
-            </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>CPU (M2)</th>
+                            <th>GPU (A100)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Graph Building</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                        <tr>
+                            <td>Node Embeddings</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                        <tr>
+                            <td>500 QA pairs</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                        <tr>
+                            <td>PyG Dataset</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                        <tr>
+                            <td>Training (tbd epochs)</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                        <tr>
+                            <td>Query Inference</td>
+                            <td>tbd</td>
+                            <td>tbd</td>
+                        </tr>
+                    </tbody>
+                </table>
         </section>
 
         <section id="faq">
