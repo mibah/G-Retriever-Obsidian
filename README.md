@@ -27,4 +27,4 @@
 **Frontend**: Obsidian Plugin API (JavaScript)  
 **LLM**: Ollama (llama3:8b)
 
-Perfect for researchers, students, and knowledge workers who want to unlock the full potential of their notes.
+Perfect for researchers, students, and knowledge workers who want to unlock the full potential of their notes. Happy about https://ko-fi.com/mikelbahn
