@@ -1,0 +1,71 @@
+/* Add to existing styles.css */
+
+.g-retriever-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--background-secondary);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-connected {
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.status-error {
+    background: #ef4444;
+}
+
+.status-checking {
+    background: #f59e0b;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-text {
+    font-weight: 500;
+}
+
+/* neu für den send button*/
+
+.g-retriever-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.g-retriever-textarea-wrapper,
+.g-retriever-button-wrapper {
+    width: 100%;
+    display: flex;
+}
+
+.g-retriever-input {
+    width: 100%;
+    flex: 1;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.g-retriever-send-button {
+    align-self: flex-end;     /* Button rechtsbündig */
+    padding: 8px 16px;
+    /* Falls du den Button lieber vollbreit willst: */
+    /* align-self: stretch; */
+    /* width: 100%; */
+}
