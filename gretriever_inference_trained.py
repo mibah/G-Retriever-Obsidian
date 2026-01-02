@@ -14,7 +14,7 @@ class TrainedGraphRetriever(GraphRetriever):
         super().__init__(graph_path, **kwargs)
 
         # Lade trainiertes Model
-        print(f"Loading trained model from {model_path}...")
+        self._log(f"Loading trained model from {model_path}...")
         checkpoint = torch.load(model_path, map_location=self.device)
 
         embed_dim = self.node_embeddings.shape[1]
@@ -28,7 +28,7 @@ class TrainedGraphRetriever(GraphRetriever):
         self.trained_model.load_state_dict(checkpoint['model_state_dict'])
         self.trained_model.eval()
 
-        print("✓ Trained model loaded!")
+        self._log("✓ Trained model loaded!")
 
     def retrieve_relevant_nodes(self, query: str, k: int = 10):
         """Retrieval mit trainiertem Model"""
@@ -61,7 +61,8 @@ def main():
         graph_path=graph_path,
         model_path=model_path,
         ollama_model="llama3:8b",
-        ollama_url="http://localhost:11434"
+        ollama_url="http://localhost:11434",
+        verbose=True  # Terminal output wie bei normalem Retriever
     )
 
     chat = InteractiveChatInterface(retriever)

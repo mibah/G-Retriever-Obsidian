@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
   "description": "Chat with your vault using G-Retriever",
-  "author": "Dein Name",
-  "authorUrl": "https://github.com/deinname",
+  "author": "Mikel Bahn",
+  "authorUrl": "https://github.com/mibah",
   "isDesktopOnly": true
 }

@@ -29,16 +29,18 @@ class GraphRetriever:
                  gnn_layers: int = 3,
                  ollama_model: str = "llama3:8b",
                  ollama_url: str = "http://localhost:11434",
-                 device: str = "cuda" if torch.cuda.is_available() else "cpu"):
+                 device: str = "cuda" if torch.cuda.is_available() else "cpu",
+                 verbose: bool = True):
 
         self.device = device
         self.ollama_model = ollama_model
         self.ollama_url = ollama_url
+        self.verbose = verbose
 
         # Lade Graph
         import pickle
 
-        print(f"Loading graph from {graph_path}...")
+        self._log(f"Loading graph from {graph_path}...")
         with open(graph_path, 'rb') as f:
             self.graph = pickle.load(f)
 
@@ -46,11 +48,11 @@ class GraphRetriever:
         self.node_to_idx = {node: idx for idx, node in enumerate(self.node_list)}
 
         # Embedder
-        print("Loading embedding model...")
+        self._log("Loading embedding model...")
         self.embedder = SentenceTransformer(embedding_model)
 
         # Pre-compute node embeddings
-        print("Computing node embeddings...")
+        self._log("Computing node embeddings...")
         self._compute_node_embeddings()
 
         # Build edge index
@@ -60,7 +62,12 @@ class GraphRetriever:
         embed_dim = self.node_embeddings.shape[1]
         self.gnn = SimpleGNN(embed_dim, gnn_hidden, gnn_layers).to(device)
 
-        print("GraphRetriever ready!")
+        self._log("GraphRetriever ready!")
+
+    def _log(self, message: str):
+        """Internal logging - only prints if verbose=True"""
+        if self.verbose:
+            print(message)
 
     def _compute_node_embeddings(self):
         """Pre-compute embeddings für alle Knoten"""
@@ -73,7 +80,7 @@ class GraphRetriever:
         self.node_embeddings = self.embedder.encode(
             node_texts,
             batch_size=32,
-            show_progress_bar=True,
+            show_progress_bar=self.verbose,
             convert_to_tensor=True,
             device=self.device
         )
@@ -135,7 +142,6 @@ class GraphRetriever:
             # Edges + Costs
             edges = self.edge_index.t().cpu().numpy()
             costs = np.ones(edges.shape[0])  # Uniform cost
-            #costs = np.full(edges.shape[0], 0.01)
 
             # PCST
             root = relevant_nodes[0]
@@ -186,15 +192,14 @@ class GraphRetriever:
         # Erstelle Context aus Subgraph
         context_parts = []
         for idx in subgraph_nodes[:10]:  # Max 10 nodes für Context
-            # NEW: Prüfe ob Index gültig ist
+            # Prüfe ob Index gültig ist
             if idx < 0 or idx >= len(self.node_list):
-                print(f"Warning: Invalid node index {idx}, skipping...")
                 continue
+
             node = self.node_list[idx]
 
-            # NEW: Prüfe ob Knoten wirklich im Graph existiert
+            # Prüfe ob Knoten wirklich im Graph existiert
             if node not in self.graph.nodes:
-                print(f"Warning: Node '{node}' not in graph, skipping...")
                 continue
 
             content = self.graph.nodes[node].get("content", "")[:500]
@@ -204,12 +209,12 @@ class GraphRetriever:
 
         prompt = f"""Basierend auf den folgenden Notizen, beantworte die Frage präzise und informativ.
 
-                Notizen:
-                {context}
-                
-                Frage: {query}
-                
-                Antwort:"""
+Notizen:
+{context}
+
+Frage: {query}
+
+Antwort:"""
 
         try:
             response = requests.post(
@@ -232,35 +237,36 @@ class GraphRetriever:
         """
         Vollständiger RAG Pipeline: Retrieve -> Construct -> Generate
         """
-        print(f"\nQuery: {question}")
+        self._log(f"\nQuery: {question}")
 
         # 1. Retrieval
-        print("Retrieving relevant nodes...")
+        self._log("Retrieving relevant nodes...")
         relevant_nodes = self.retrieve_relevant_nodes(question, k=k_retrieve)
 
-        # DEBUG: Check validity
-        print(f"DEBUG: Retrieved node indices: {relevant_nodes}")
-        print(f"DEBUG: Node list length: {len(self.node_list)}")
-        print(f"DEBUG: Retrieved node names: {[self.node_list[i] for i in relevant_nodes if i < len(self.node_list)]}")
+        if self.verbose:
+            self._log(f"DEBUG: Retrieved node indices: {relevant_nodes}")
+            self._log(f"DEBUG: Node list length: {len(self.node_list)}")
+            valid_nodes = [self.node_list[i] for i in relevant_nodes if i < len(self.node_list)]
+            self._log(f"DEBUG: Retrieved node names: {valid_nodes}")
 
         # 2. Subgraph Construction (PCST)
-        print("Constructing subgraph...")
+        self._log("Constructing subgraph...")
         query_emb = self.embedder.encode(question, convert_to_tensor=True)
         subgraph_nodes = self.construct_subgraph_pcst(relevant_nodes, query_emb)
 
-        # 3. Encode (optional, für mehr Kontext)
-        # graph_emb = self.encode_subgraph(subgraph_nodes)
-
-        # 4. Generate
-        print("Generating answer...")
+        # 3. Generate
+        self._log("Generating answer...")
         answer = self.generate_answer(question, subgraph_nodes)
 
-        # Return mit Metadaten
+        # Return mit Metadaten und Debug-Infos
+        retrieved_names = [self.node_list[i] for i in relevant_nodes if i < len(self.node_list)]
         return {
             "question": question,
             "answer": answer,
-            "retrieved_nodes": [self.node_list[i] for i in relevant_nodes[:5]],
-            "subgraph_nodes": [self.node_list[i] for i in subgraph_nodes]
+            "retrieved_nodes": [self.node_list[i] for i in relevant_nodes[:5] if i < len(self.node_list)],
+            "subgraph_nodes": [self.node_list[i] for i in subgraph_nodes if i < len(self.node_list)],
+            "retrieved_indices": relevant_nodes,
+            "retrieved_names": retrieved_names
         }
 
 
@@ -341,7 +347,8 @@ def main():
         graph_path,
         embedding_model=embedding_model,
         ollama_model=ollama_model,
-        ollama_url=ollama_url
+        ollama_url=ollama_url,
+        verbose=True  # Set to False for server usage
     )
 
     # Starte Chat
