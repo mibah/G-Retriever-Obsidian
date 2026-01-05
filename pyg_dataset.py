@@ -1,6 +1,7 @@
 """
 PyTorch Geometric Dataset für G-Retriever
 Konvertiert NetworkX Graph + QA-Paare in PyG Format.
+FIXED: Nutzt jetzt relevant_node_indices aus den Trainingsdaten!
 """
 
 import json
@@ -92,17 +93,21 @@ class ObsidianGraphDataset(InMemoryDataset):
 
         # 5. Erstelle Edge Index
         edge_list = list(graph.edges())
-        edge_index = torch.tensor([
-            [node_to_idx[u] for u, v in edge_list],
-            [node_to_idx[v] for u, v in edge_list]
-        ], dtype=torch.long)
+        if len(edge_list) > 0:
+            edge_index = torch.tensor([
+                [node_to_idx[u] for u, v in edge_list],
+                [node_to_idx[v] for u, v in edge_list]
+            ], dtype=torch.long)
 
-        # Für undirected: beide Richtungen
-        edge_index = torch.cat([edge_index, edge_index.flip(0)], dim=1)
+            # Für undirected: beide Richtungen
+            edge_index = torch.cat([edge_index, edge_index.flip(0)], dim=1)
+        else:
+            edge_index = torch.tensor([[],[]], dtype=torch.long)
 
         # 6. Erstelle Data-Objekte für jedes QA-Paar
         print("Creating Data objects...")
         data_list = []
+        skipped = 0
 
         for qa in tqdm(qa_pairs):
             question = qa["question"]
@@ -114,6 +119,33 @@ class ObsidianGraphDataset(InMemoryDataset):
                 convert_to_tensor=True
             ).unsqueeze(0)  # [1, embed_dim]
 
+            # WICHTIG: Hole relevant_node_indices aus QA-Daten
+            relevant_nodes = None
+            if "relevant_node_indices" in qa and qa["relevant_node_indices"]:
+                # Direkt die Indices aus den Trainingsdaten
+                relevant_nodes = torch.tensor(qa["relevant_node_indices"], dtype=torch.long)
+            elif "relevant_nodes" in qa and qa["relevant_nodes"]:
+                # Fallback: Konvertiere Node-Namen zu Indices
+                relevant_nodes = torch.tensor(
+                    [node_to_idx[n] for n in qa["relevant_nodes"] if n in node_to_idx],
+                    dtype=torch.long
+                )
+            elif "node" in qa:
+                # Alte Daten: Single node
+                if qa["node"] in node_to_idx:
+                    relevant_nodes = torch.tensor([node_to_idx[qa["node"]]], dtype=torch.long)
+            elif "nodes" in qa:
+                # Alte Daten: Multiple nodes
+                relevant_nodes = torch.tensor(
+                    [node_to_idx[n] for n in qa["nodes"] if n in node_to_idx],
+                    dtype=torch.long
+                )
+
+            if relevant_nodes is None or len(relevant_nodes) == 0:
+                print(f"Warning: No relevant nodes for question: {question[:50]}...")
+                skipped += 1
+                continue
+
             # Erstelle Data-Objekt
             data = Data(
                 x=node_embeddings.clone(),  # Node features [num_nodes, embed_dim]
@@ -121,106 +153,17 @@ class ObsidianGraphDataset(InMemoryDataset):
                 question=question,  # String
                 answer=answer,  # String
                 question_emb=question_emb,  # Tensor [1, embed_dim]
+                relevant_nodes=relevant_nodes,  # Tensor [num_relevant_nodes]
                 num_nodes=len(node_list)
             )
-
-            # Optional: Relevante Knoten markieren (für Training)
-            if "node" in qa:
-                # Single node
-                relevant_nodes = [node_to_idx[qa["node"]]]
-            elif "nodes" in qa:
-                # Multiple nodes
-                relevant_nodes = [node_to_idx[n] for n in qa["nodes"] if n in node_to_idx]
-            else:
-                relevant_nodes = []
-
-            if relevant_nodes:
-                data.relevant_nodes = torch.tensor(relevant_nodes, dtype=torch.long)
 
             data_list.append(data)
 
         # 7. Speichern
         self.save(data_list, self.processed_paths[0])
         print(f"Saved {len(data_list)} samples to {self.processed_paths[0]}")
-
-
-class GraphTextDataset:
-    """
-    Alternative: Einfacheres Dataset ohne InMemoryDataset
-    Gut für große Graphen die nicht ins RAM passen
-    """
-
-    def __init__(self, graph_path: str, qa_path: str,
-                 embedding_model: str = "all-MiniLM-L6-v2"):
-        import pickle
-
-        with open(graph_path, 'rb') as f:
-            self.graph = pickle.load(f)
-
-        with open(qa_path, 'r', encoding='utf-8') as f:
-            self.qa_pairs = json.load(f)
-
-        self.node_list = list(self.graph.nodes())
-        self.node_to_idx = {node: idx for idx, node in enumerate(self.node_list)}
-
-        self.embedder = SentenceTransformer(embedding_model)
-
-        # Pre-compute node embeddings
-        print("Pre-computing node embeddings...")
-        node_texts = [
-            f"{node}. {self.graph.nodes[node].get('content', '')[:500]}"
-            for node in self.node_list
-        ]
-        self.node_embeddings = self.embedder.encode(
-            node_texts,
-            batch_size=32,
-            show_progress_bar=True,
-            convert_to_tensor=True
-        )
-
-        # Pre-compute edge index
-        edge_list = list(self.graph.edges())
-        edge_index = torch.tensor([
-            [self.node_to_idx[u] for u, v in edge_list],
-            [self.node_to_idx[v] for u, v in edge_list]
-        ], dtype=torch.long)
-        self.edge_index = torch.cat([edge_index, edge_index.flip(0)], dim=1)
-
-    def __len__(self):
-        return len(self.qa_pairs)
-
-    def __getitem__(self, idx):
-        qa = self.qa_pairs[idx]
-
-        question_emb = self.embedder.encode(
-            qa["question"],
-            convert_to_tensor=True
-        ).unsqueeze(0)
-
-        data = Data(
-            x=self.node_embeddings.clone(),
-            edge_index=self.edge_index.clone(),
-            question=qa["question"],
-            answer=qa["answer"],
-            question_emb=question_emb,
-            num_nodes=len(self.node_list)
-        )
-
-        return data
-
-    def get_node_text(self, node_idx: int) -> str:
-        """Gibt Text für einen Knoten zurück"""
-        node = self.node_list[node_idx]
-        return self.graph.nodes[node].get("content", "")
-
-    def get_subgraph_text(self, node_indices: List[int]) -> str:
-        """Gibt kombinierten Text für mehrere Knoten zurück"""
-        texts = []
-        for idx in node_indices:
-            node = self.node_list[idx]
-            content = self.graph.nodes[node].get("content", "")
-            texts.append(f"[{node}]: {content}")
-        return "\n\n".join(texts)
+        if skipped > 0:
+            print(f"Skipped {skipped} samples without relevant nodes")
 
 
 def create_datasets(graph_path: str, train_path: str, val_path: str,
@@ -255,6 +198,10 @@ def main():
     """Direkte Nutzung"""
 
     graph_path = "./graph_output/graph.gpickle"
+
+    # to load a preprocessed graph
+    #graph_path = "./graph_output/graph_enhanced.gpickle"
+
     train_path = "./training_data/train.json"
     val_path = "./training_data/val.json"
     output = "./processed_data"

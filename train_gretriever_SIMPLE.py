@@ -236,10 +236,6 @@ def main():
     # Pfade
     processed_dir = "./processed_data"
     graph_path = "./graph_output/graph.gpickle"
-
-    #to load a preprocessed graph
-    #graph_path = "./graph_output/graph_enhanced.gpickle"
-
     train_path = "./training_data/train.json"
     val_path = "./training_data/val.json"
 
